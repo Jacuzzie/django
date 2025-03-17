@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+<div class="form-container">
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <h3 class="field-label">{{ field.label }}</h3>
+            <p class="field-body">{{ field }}</p>
+        {% endfor%}
+        <button type="submit">Confirm</button>
+    </form>
+</div>
+
+
+{% endblock %}

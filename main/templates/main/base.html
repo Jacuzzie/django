@@ -1,0 +1,52 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Green Energy</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav>
+        <div>
+            <a href="{% url 'main:home' %}">Home</a>
+        </div>
+
+        <div>Products
+            <ul>
+                <li>Solar Panels</li>
+                <li>EV Chargers</li>
+                <li>Smart Home Devices</li>
+            </ul>
+        </div>
+        <div>Booking services
+            <ul>
+                <li>Consultations</li>
+                <li>Installations</li>
+            </ul>
+        </div>
+        <div>Dashboard
+            <ul>
+                <li>My Bookings</li>
+                <li>My Energy Usage</li>
+                <li>Carbon Footprint</li>
+            </ul>
+        </div>
+        <div><a href="{% url 'main:contact' %}">Contact Us</a></div>
+        <div>
+            <a href="{% url 'main:about' %}">About</a>
+        </div>
+    </nav>
+
+    {% if messages %}
+        {% for message in messages %}>
+            {{ message }}
+        {% endfor %}
+    {% endif %}
+
+    {% block content %}
+    
+    {% endblock %}
+</body>
+</html>

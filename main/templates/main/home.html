@@ -1,50 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Green Energy</title>
-    <style>
-        body { background: #e9e9e9; font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        nav { display: flex; justify-content: space-around; padding: 20px; background: white; }
-        nav div { position: relative; }
-        nav div ul { display: none; position: absolute; list-style: none; background: #ccc; padding: 10px; margin: 0; }
-        li { padding: 1rem}
-        nav div:hover ul { display: block; }
-        .button { background: green; color: white; padding: 15px 30px; display: block; width: 300px; margin: 20px auto; text-align: center; border-radius: 50px; text-decoration: none; }
-        .card-container { display: flex; justify-content: center; gap: 20px; margin: 20px; }
-        .card { background: #bbb; padding: 20px; width: 150px; text-align: center; border-radius: 10px; }
-        .card img { width: 100px; height: 100px; object-fit: contain; }
-    </style>
-</head>
-<body>
+{% extends 'main/base.html' %}
 
-<nav>
-    <div>
-        <a href="{% url 'main:home' %}">Home</a>
-    </div>
-    <div>Products
-        <ul>
-            <li>Solar Panels</li>
-            <li>EV Chargers</li>
-            <li>Smart Home Devices</li>
-        </ul>
-    </div>
-    <div>Booking Consultation
-        <ul>
-            <li>Home Energy Consultations</li>
-            <li>EV Chargers Installations</li>
-        </ul>
-    </div>
-    <div>Dashboard
-        <ul>
-            <li>My Bookings</li>
-            <li>My Energy Usage</li>
-            <li>Carbon Footprint</li>
-        </ul>
-    </div>
-    <div>Contact</div>
-</nav>
-
+{% block content %}
 <a href="#" class="button">Book a Free Consultation</a>
 
 <div class="card-container">
@@ -66,5 +22,4 @@
     </div>
 </div>
 
-</body>
-</html>
+{% endblock %}
