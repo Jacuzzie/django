@@ -1,0 +1,130 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="consultations-container">
+    <h1>Book a Consultation</h1>
+
+    <!-- Booking Section -->
+    <form method="post" id="consultation-form">
+        {% csrf_token %}
+        <div class="booking-section">
+            <!-- Service Selection -->
+            <div class="service-selection">
+                <h2>Select a Service</h2>
+                <select name="service" id="service" required>
+                    <option value="" disabled selected>Select a service</option>
+                    <option value="EV Charger Installation">EV Charger Installation</option>
+                    <option value="Home Energy Consultation">Home Energy Consultation</option>
+                </select>
+            </div>
+
+            <!-- Calendar -->
+            <div class="calendar-section">
+                <h2>Calendar</h2>
+                <input type="text" id="calendar" name="date" placeholder="Select a date" required>
+            </div>
+
+            <!-- Available Times -->
+            <div class="time-selection">
+                <h2>Available Times</h2>
+                <select name="time" id="time" required>
+                    <option value="" disabled selected>Select a time</option>
+                    <option value="2:00 PM">2:00 PM</option>
+                    <option value="3:00 PM">3:00 PM</option>
+                    <option value="5:00 PM">5:00 PM</option>
+                    <option value="6:00 PM">6:00 PM</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Topic and Consultant -->
+        <div class="additional-info">
+            <h2>Enter Details</h2>
+            <input type="text" name="topic" placeholder="Enter the topic" required>
+            <input type="text" name="consultant" placeholder="Enter the consultant's name" required>
+        </div>
+
+        <!-- Book Now Button -->
+        <div class="book-now">
+            <button type="submit" class="book-now-button">Book Now</button>
+        </div>
+    </form>
+</div>
+
+<!-- Include Flatpickr CSS and JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    // Initialize Flatpickr for the calendar input
+    flatpickr("#calendar", {
+        minDate: "today", // Disable past dates
+        dateFormat: "Y-m-d", // Format for the backend
+    });
+</script>
+
+<style>
+    .consultations-container {
+        font-family: Arial, sans-serif;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h2 {
+        text-align: center;
+        color: #333;
+    }
+
+    .booking-section {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .service-selection, .calendar-section, .time-selection {
+        flex: 1;
+        margin: 0 10px;
+    }
+
+    select, input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .additional-info {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .additional-info input {
+        margin-bottom: 10px;
+    }
+
+    .book-now {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .book-now-button {
+        padding: 15px 30px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .book-now-button:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}

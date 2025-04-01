@@ -1,0 +1,141 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="info-section">
+    <div class="info-item">
+        <span>My Booking Date</span>
+        <span>dd/mm/yy</span>
+    </div>
+    <div class="info-item">
+        <span>Energy Usage</span>
+        <span id="energy-usage-display">0 kWh</span>
+    </div>
+</div>
+
+<!-- Calculator and Help Section -->
+<div class="calculator-help-container">
+    <!-- Energy Usage Calculator -->
+    <div class="calculator-section">
+        <h3>Energy Usage Calculator</h3>
+        <form id="energy-calculator">
+            <label for="appliance-power">Appliance Power (Watts):</label>
+            <input type="number" id="appliance-power" name="appliance-power" placeholder="Enter power in watts" required />
+
+            <label for="usage-time">Usage Time (Hours):</label>
+            <input type="number" id="usage-time" name="usage-time" placeholder="Enter time in hours" required />
+
+            <button type="button" id="calculate-energy-button">Calculate</button>
+        </form>
+
+        <div id="calculator-result" class="result">
+            <!-- The result will be displayed here -->
+        </div>
+    </div>
+
+    <!-- Need Help Section -->
+    <div class="help-section">
+        <h3>Need Help:</h3>
+        <div class="chat-support">
+            <div id="chat-box" class="chat-box">
+                <!-- Messages will appear here -->
+            </div>
+            <input type="text" id="chat-input" placeholder="Type your message..." />
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+</div>
+
+<!-- Graph Section -->
+<div class="graph-container">
+    <div class="graphs-section">
+        <div class="graph">
+            <h3>Energy Usage Graph</h3>
+            <canvas id="energyUsageGraph" width="400" height="200"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    let previousEnergyUsage = 0; // Store the previous energy usage value
+
+    // Event listener for the calculator button
+    document.getElementById('calculate-energy-button').addEventListener('click', function () {
+        const power = parseFloat(document.getElementById('appliance-power').value);
+        const time = parseFloat(document.getElementById('usage-time').value);
+
+        if (isNaN(power) || isNaN(time) || power <= 0 || time <= 0) {
+            document.getElementById('calculator-result').innerHTML = '<p style="color: red;">Please enter valid positive numbers for both fields.</p>';
+            return;
+        }
+
+        // Example calculation: Energy usage = power (Watts) * time (Hours) / 1000 (to convert to kWh)
+        const energyUsage = (power * time) / 1000;
+
+        // Display the result in the calculator section
+        document.getElementById('calculator-result').innerHTML = `
+            <p>Your estimated energy usage is <strong>${energyUsage.toFixed(2)} kWh</strong> for ${time} hours of usage.</p>
+        `;
+
+        // Calculate the percentage change
+        let percentageChange = 0;
+        if (previousEnergyUsage > 0) {
+            percentageChange = ((energyUsage - previousEnergyUsage) / previousEnergyUsage) * 100;
+        }
+
+        // Update the "Energy Usage" value at the top of the screen
+        const energyUsageDisplay = document.getElementById('energy-usage-display');
+        energyUsageDisplay.textContent = `${energyUsage.toFixed(2)} kWh (${percentageChange.toFixed(2)}% change)`;
+
+        // Update the graph with the new energy usage value
+        updateGraph(energyUsage);
+
+        // Store the current energy usage as the previous value for the next calculation
+        previousEnergyUsage = energyUsage;
+    });
+
+    // Graph initialization
+    const labels = ['January', 'February', 'March', 'April', 'May', 'June'];
+    const initialEnergyUsage = 0; // Initial energy usage value
+    const data = {
+        labels: labels,
+        datasets: [{
+            label: 'Energy Usage (kWh)',
+            data: [initialEnergyUsage, 50, 75, 60, 80, 90], // Replace the first value with the initial energy usage
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    };
+
+    const config = {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Energy Usage Over Time'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    };
+
+    const ctx = document.getElementById('energyUsageGraph').getContext('2d');
+    const energyUsageGraph = new Chart(ctx, config);
+
+    // Function to dynamically update the graph
+    function updateGraph(newEnergyUsage) {
+        energyUsageGraph.data.datasets[0].data[0] = newEnergyUsage; // Update the first data point
+        energyUsageGraph.update(); // Refresh the graph
+    }
+</script>
+{% endblock %}

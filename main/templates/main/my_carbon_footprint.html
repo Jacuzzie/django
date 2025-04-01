@@ -1,0 +1,182 @@
+{% extends 'main/base.html' %}
+{% load static %}
+<script src="{% static 'js/chart.min.js' %}"></script>
+
+{% block content %}
+<div class="info-section">
+    <div class="info-item">
+        <span>My Booking Date</span>
+        <span>dd/mm/yy</span>
+    </div>
+    <div class="info-item">
+        <span>Carbon Footprint</span>
+        <span id="carbon-footprint-display">0% change</span>
+    </div>
+</div>
+
+<!-- Calculator and Help Section -->
+<div class="calculator-help-container">
+    <!-- Carbon Footprint Calculator -->
+    <div class="calculator-section">
+        <h3>Carbon Footprint Calculator</h3>
+        <form id="carbon-calculator">
+            <label for="distance">Distance Traveled (km):</label>
+            <input type="number" id="distance" name="distance" placeholder="Enter distance in km" required />
+
+            <label for="fuel">Fuel Consumed (liters):</label>
+            <input type="number" id="fuel" name="fuel" placeholder="Enter fuel in liters" required />
+
+            <button type="button" id="calculate-button">Calculate</button>
+        </form>
+
+        <div id="calculator-result" class="result">
+            <!-- The result will be displayed here -->
+        </div>
+    </div>
+
+    <!-- Need Help Section -->
+    <div class="help-section">
+        <h3>Need Help:</h3>
+        <div class="chat-support">
+            <div id="chat-box" class="chat-box">
+                <!-- Messages will appear here -->
+            </div>
+            <input type="text" id="chat-input" placeholder="Type your message..." />
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('calculate-button').addEventListener('click', function () {
+        const distance = parseFloat(document.getElementById('distance').value);
+        const fuel = parseFloat(document.getElementById('fuel').value);
+
+        if (isNaN(distance) || isNaN(fuel) || distance <= 0 || fuel <= 0) {
+            document.getElementById('calculator-result').innerHTML = '<p style="color: red;">Please enter valid positive numbers for both fields.</p>';
+            return;
+        }
+
+        // Example calculation: Carbon footprint = fuel consumed (liters) * 2.31 (kg CO2 per liter of fuel)
+        const carbonFootprint = fuel * 2.31;
+
+        // Display the result
+        document.getElementById('calculator-result').innerHTML = `
+            <p>Your estimated carbon footprint is <strong>${carbonFootprint.toFixed(2)} kg CO2</strong> for traveling ${distance} km.</p>
+        `;
+    });
+</script>
+
+
+<!-- Graph Section -->
+<div class="graph-container">
+    <div class="graphs-section">
+        <div class="graph">
+            <h3>Carbon Footprint Graph</h3>
+            <canvas id="carbonFootprintGraph" width="400" height="200"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('send-button').addEventListener('click', function () {
+    const chatInput = document.getElementById('chat-input');
+    const chatBox = document.getElementById('chat-box');
+    const message = chatInput.value;
+
+    if (message.trim() !== '') {
+        // Get the current timestamp
+        const timestamp = new Date().toLocaleTimeString();
+
+        // Display the user's message in the chat box
+        const userMessage = document.createElement('div');
+        userMessage.innerHTML = `<strong>You:</strong> ${message} <span class="timestamp">${timestamp}</span>`;
+        userMessage.classList.add('chat-message', 'user'); // Add user-specific styling
+        chatBox.appendChild(userMessage);
+
+        // Send the message to the server
+        fetch("{% url 'main:chat_response' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}', // Include CSRF token for security
+            },
+            body: `message=${encodeURIComponent(message)}`,
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Get the current timestamp for the bot's response
+                const botTimestamp = new Date().toLocaleTimeString();
+
+                // Display the server's response in the chat box
+                const botMessage = document.createElement('div');
+                botMessage.innerHTML = `<strong>Bot:</strong> ${data.response} <span class="timestamp">${botTimestamp}</span>`;
+                botMessage.classList.add('chat-message', 'bot'); // Add bot-specific styling
+                chatBox.appendChild(botMessage);
+
+                // Scroll to the bottom of the chat box
+                chatBox.scrollTop = chatBox.scrollHeight;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        // Clear the input field
+        chatInput.value = '';
+
+        // Scroll to the bottom of the chat box after user's message
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+});
+</script>
+<script>
+    const labels = ['January', 'February', 'March', 'April', 'May', 'June'];
+    const carbonFootprint = JSON.parse('{{ carbon_footprint|default:0|floatformat:"0" }}'); // Current carbon footprint value
+    const data = {
+        labels: labels,
+        datasets: [{
+            label: 'Carbon Footprint (kg CO2)',
+            data: [carbonFootprint, 59, 80, 81, 56, 55], // Replace the first value with the current carbon footprint
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    };
+
+    const config = {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Carbon Footprint Over Time'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    };
+
+    // Initialize the graph
+    const ctx = document.getElementById('carbonFootprintGraph').getContext('2d');
+    const carbonFootprintGraph = new Chart(ctx, config);
+
+    // Optional: Function to dynamically update the graph
+    function updateGraph(newCarbonFootprint) {
+        carbonFootprintGraph.data.datasets[0].data[0] = newCarbonFootprint; // Update the first data point
+        carbonFootprintGraph.update(); // Refresh the graph
+    }
+
+    // Example: Dynamically update the graph with a new value
+    const newCarbonFootprint = 60; // Replace with the new value
+    updateGraph(newCarbonFootprint);
+</script>
+{% endblock %}
