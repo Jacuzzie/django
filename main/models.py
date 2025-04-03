@@ -12,6 +12,7 @@ class ChatMessage(models.Model):
 
 # Booking model
 class Booking(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Associate booking with a user
     service = models.CharField(max_length=100)
     date = models.DateField()
     time = models.TimeField()
@@ -19,4 +20,4 @@ class Booking(models.Model):
     consultant = models.CharField(max_length=100, default="Not Assigned")  # Default value
 
     def __str__(self):
-        return f"{self.service} on {self.date} at {self.time}"
+        return f"{self.service} on {self.date} at {self.time} by {self.user.username}"

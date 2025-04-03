@@ -4,10 +4,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Green Energy</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
+<style>
+   a {
+       text-decoration: none;
+       color: black;
+   }
+
+   nav {
+       background: #56bf52;
+   }
+
+   nav div {
+       font-weight: bold;
+       font-size: 1.25rem;
+   }
+</style>
 <body>
     <nav>
         <div>
@@ -21,11 +38,8 @@
                 <li>Smart Home Devices</li>
             </ul>
         </div>
-        <div>Booking services
-            <ul>
-                <li><a href="{% url 'main:consultations' %}">Consultations</a></li>
-                <li>Installations</li>
-            </ul>
+        <div>
+            <a href="{% url 'main:consultations' %}">Consultations and Installations</a>
         </div>
         <div>Dashboard
             <ul>
@@ -34,15 +48,21 @@
                 <li><a href="{% url 'main:my_carbon_footprint' %}">Carbon Footprint</a></li>
             </ul>
         </div>
-        <div><a href="{% url 'main:contact' %}">Contact Us</a></div>
-        <div>
-            <a href="{% url 'main:about' %}">About</a>
-        </div>
         <div>
             {% if user.is_authenticated %}
-                <a href="{% url 'main:logout' %}">Logout</a>
+            <div>Settings
+                <ul>
+                    <li>
+                        <form method="post" action="{% url 'main:logout' %}">
+                            {% csrf_token %}
+                            <button type="submit">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
             {% else %}
                 <a href="{% url 'main:login' %}">Login</a>
+                <a href="{% url 'main:signup' %}">Sign Up</a>
             {% endif %}
         </div>
     </nav>
@@ -53,8 +73,18 @@
         {% endfor %}
     {% endif %}
 
-    {% block content %}
-    
-    {% endblock %}
+    <main>
+        {% block content %}
+        <!-- Page-specific content will go here -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="{% url 'main:about' %}">About</a> |
+            <a href="{% url 'main:contact' %}">Contact Us</a>
+        </div>
+        <p>&copy; 2025 Green Energy. All rights reserved.</p>
+    </footer>
 </body>
 </html>

@@ -3,10 +3,6 @@
 {% block content %}
 <div class="info-section">
     <div class="info-item">
-        <span>My Booking Date</span>
-        <span>dd/mm/yy</span>
-    </div>
-    <div class="info-item">
         <span>Energy Usage</span>
         <span id="energy-usage-display">0 kWh</span>
     </div>
@@ -56,6 +52,58 @@
 </div>
 
 <script>
+    document.getElementById('send-button').addEventListener('click', function () {
+        const chatInput = document.getElementById('chat-input');
+        const chatBox = document.getElementById('chat-box');
+        const message = chatInput.value;
+
+        if (message.trim() !== '') {
+            // Get the current timestamp
+            const timestamp = new Date().toLocaleTimeString();
+
+            // Display the user's message in the chat box
+            const userMessage = document.createElement('div');
+            userMessage.innerHTML = `<strong>You:</strong> ${message} <span class="timestamp">${timestamp}</span>`;
+            userMessage.classList.add('chat-message', 'user'); // Add user-specific styling
+            chatBox.appendChild(userMessage);
+
+            // Send the message to the server
+            fetch("{% url 'main:chat_response' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}', // Include CSRF token for security
+                },
+                body: `message=${encodeURIComponent(message)}`,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Get the current timestamp for the bot's response
+                    const botTimestamp = new Date().toLocaleTimeString();
+
+                    // Display the server's response in the chat box
+                    const botMessage = document.createElement('div');
+                    botMessage.innerHTML = `<strong>Bot:</strong> ${data.response} <span class="timestamp">${botTimestamp}</span>`;
+                    botMessage.classList.add('chat-message', 'bot'); // Add bot-specific styling
+                    chatBox.appendChild(botMessage);
+
+                    // Scroll to the bottom of the chat box
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+            // Clear the input field
+            chatInput.value = '';
+
+            // Scroll to the bottom of the chat box after user's message
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    });
+
+
+
     let previousEnergyUsage = 0; // Store the previous energy usage value
 
     // Event listener for the calculator button

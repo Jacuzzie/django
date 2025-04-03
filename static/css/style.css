@@ -11,11 +11,21 @@ nav {
     display: flex;
     justify-content: space-around;
     padding: 20px;
-    background: white;
+    background-color: #f5f5f5;
+    color: black;
+    font-weight: bold;
 }
 
 nav div {
     position: relative;
+    text-decoration: none;
+    color: black;
+}
+
+nav a {
+    position: relative;
+    text-decoration: none;
+    color: black;
 }
 
 nav div ul {
@@ -281,4 +291,45 @@ nav div:hover ul {
         padding: 8px;
         font-size: 0.9em; /* Reduce button size */
     }
+}
+
+/* Ensure the body and html take up the full height */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content should take up the remaining space */
+main {
+    flex: 1;
+}
+
+/* Footer stays at the bottom */
+footer {
+    text-align: center;
+    background-color: #f8f8f8; /* Optional: Add a background color */
+    padding: 10px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+footer .footer-links a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+footer .footer-links a:hover {
+    text-decoration: underline;
+}
+
+footer .footer-links {
+    display: inline-block;
+}
+
+footer .footer-links a + a {
+    margin-left: 10px; /* Adds spacing between links */
 }

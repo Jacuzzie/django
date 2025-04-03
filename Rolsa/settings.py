@@ -45,19 +45,20 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Ensure this is present
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'main.middleware.LoginRequiredMiddleware',  # Ensure this middleware exists in main/middleware.py
 ]
 
 ROOT_URLCONF = 'Rolsa.urls'
 
+import os
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # Add this if you have a global templates directory
-        'APP_DIRS': True,  # This ensures Django looks in app-specific templates directories
+        'DIRS': [os.path.join(BASE_DIR, 'main', 'templates')],  # Ensure this path is correct
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -119,6 +120,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'main', 'static'),
     BASE_DIR / "static",  # Adjust this path if needed
 ]
 
@@ -127,7 +129,20 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Authentication settings
-LOGIN_URL = '/login/'  # Redirect to login page if not authenticated
-LOGIN_REDIRECT_URL = '/'  # Redirect to the home page after login
-LOGOUT_REDIRECT_URL = '/login/'  # Redirect to login page after logout
+LOGIN_REDIRECT_URL = '/home/'
+LOGOUT_REDIRECT_URL = '/login/'
+LOGIN_URL = '/'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}

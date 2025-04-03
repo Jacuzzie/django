@@ -21,7 +21,7 @@ class LoginRequiredMiddleware:
         # Resolve the current URL name
         try:
             current_url_name = resolve(request.path).url_name
-        except:
+        except Exception:
             current_url_name = None
 
         # Debugging logs
@@ -33,7 +33,7 @@ class LoginRequiredMiddleware:
         if (
             request.path in excluded_urls or
             current_url_name in ['login', 'signup', 'logout'] or
-            request.path.startswith('/static/')  # Allow static files
+            request.path.startswith(settings.STATIC_URL)  # Allow static files
         ):
             return self.get_response(request)
 

@@ -1,11 +1,9 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<h2>Welcome to the Home Page</h2>
-<p>You are logged in!</p>
 
-<a href="{% url 'main:logout' %}" class="button">Logout</a>
-<a href="#" class="button">Book a Free Consultation</a>
+<!-- Update the href to point to the consultations page -->
+<a href="{% url 'main:consultations' %}" class="button">Book a Free Consultation</a>
 
 <div class="card-container">
     <div class="card">

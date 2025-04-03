@@ -5,20 +5,27 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
-from django.conf import settings
 from datetime import datetime
 from .forms import ContactForm
 from .models import ChatMessage, Booking
+import logging
+from django.http import HttpResponse
 
-# Home Page
+logger = logging.getLogger(__name__)
+
 @login_required
 def home(request):
+    logger.info(f"User {request.user} accessed the home page.")
     return render(request, 'main/home.html')
 
 # About Page
 @login_required
 def about(request):
     return render(request, 'main/about.html')
+
+@login_required
+def dashboard(request):
+    return render(request, 'main/dashboard.html')
 
 # Contact Page
 @login_required
@@ -116,15 +123,11 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('main:home')  # Redirect to home page after signup
+            return redirect('main:home')  # Redirect to home after signup
     else:
         form = UserCreationForm()
     return render(request, 'main/signup.html', {'form': form})
 
-# Dashboard Page
-@login_required
-def dashboard(request):
-    return render(request, 'main/dashboard.html')
 
 # Debug Login View (Optional for Debugging)
 class DebugLoginView(LoginView):
@@ -133,3 +136,6 @@ class DebugLoginView(LoginView):
     def get(self, request, *args, **kwargs):
         print(f"Using template: {self.template_name}")
         return super().get(request, *args, **kwargs)
+
+def debug_root(request):
+    return HttpResponse("Root URL is working!")
