@@ -10,6 +10,8 @@ from .forms import ContactForm
 from .models import ChatMessage, Booking
 import logging
 from django.http import HttpResponse
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 logger = logging.getLogger(__name__)
 
@@ -139,3 +141,40 @@ class DebugLoginView(LoginView):
 
 def debug_root(request):
     return HttpResponse("Root URL is working!")
+
+##
+def solar_panels(request):
+    return render(request, 'main/solar_panels.html')
+
+def ev_chargers(request):
+    return render(request, 'main/ev_chargers.html')
+
+def smart_home_devices(request):
+    return render(request, 'main/smart_home_devices.html')
+
+def my_carbon_footprint(request):
+    return render(request, 'main/my_carbon_footprint.html')
+##
+
+@login_required
+def account_info(request):
+    return render(request, 'main/account_info.html', {'user': request.user})
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)  # Keep the user logged in
+            return redirect('main:account_info')
+    else:
+        form = PasswordChangeForm(user=request.user)
+    return render(request, 'main/change_password.html', {'form': form})
+
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        request.user.delete()
+        return redirect('main:home')
+    return render(request, 'main/delete_account.html')

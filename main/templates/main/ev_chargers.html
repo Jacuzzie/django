@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+<div class="product-page">
+    <h1>EV Chargers</h1>
+    <img src="{% static 'images/ev_chargers.jpg' %}" alt="EV Chargers" class="product-image">
+    <p>EV chargers are essential for powering electric vehicles efficiently. They are designed to be fast, reliable, and easy to use.</p>
+    <ul>
+        <li>Fast charging options</li>
+        <li>Compatible with most EV models</li>
+        <li>Durable and weather-resistant</li>
+    </ul>
+    <a href="{% url 'main:consultations' %}" class="primary-button">Book a Free Consultation</a>
+</div>
+{% endblock %}

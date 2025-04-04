@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<div class="account-info-page">
+    <h1>Account Info</h1>
+    <div class="account-details">
+        <p><strong>Username:</strong> {{ user.username }}</p>
+    </div>
+    <div class="account-actions">
+        <a href="{% url 'main:change_password' %}" class="button">Change Password</a>
+        <form method="post" action="{% url 'main:delete_account' %}">
+            {% csrf_token %}
+            <button type="submit" class="button delete-button">Delete Account</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

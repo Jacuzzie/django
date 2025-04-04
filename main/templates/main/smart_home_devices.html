@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+<div class="product-page">
+    <h1>Smart Home Devices</h1>
+    <img src="{% static 'images/smart_home_devices.jpg' %}" alt="Smart Home Devices" class="product-image">
+    <p>Smart home devices make your life easier by automating tasks and providing greater control over your home. They are designed to enhance convenience, security, and energy efficiency.</p>
+    <ul>
+        <li>Smart lighting and thermostats</li>
+        <li>Home security systems</li>
+        <li>Voice-controlled assistants</li>
+    </ul>
+    <a href="{% url 'main:consultations' %}" class="primary-button">Book a Free Consultation</a>
+</div>
+{% endblock %}

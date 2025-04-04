@@ -33,9 +33,9 @@
 
         <div>Products
             <ul>
-                <li>Solar Panels</li>
-                <li>EV Chargers</li>
-                <li>Smart Home Devices</li>
+                <li><a href="{% url 'main:solar_panels' %}">Solar Panels</a></li>
+                <li><a href="{% url 'main:ev_chargers' %}">EV Chargers</a></li>
+                <li><a href="{% url 'main:smart_home_devices' %}">Smart Home Devices</a></li>
             </ul>
         </div>
         <div>
@@ -57,6 +57,9 @@
                             {% csrf_token %}
                             <button type="submit">Logout</button>
                         </form>
+                    </li>
+                    <li>
+                        <a href="{% url 'main:account_info' %}">Account Information</a>
                     </li>
                 </ul>
             </div>

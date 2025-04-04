@@ -28,4 +28,16 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='main/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('signup/', views.signup, name='signup'),
+
+    #Products and services pages
+    path('solar-panels/', views.solar_panels, name='solar_panels'),
+    path('ev-chargers/', views.ev_chargers, name='ev_chargers'),
+    path('smart-home-devices/', views.smart_home_devices, name='smart_home_devices'),
+    path('my-carbon-footprint/', views.my_carbon_footprint, name='my_carbon_footprint'),
+
+    #Account information page
+    path('account-info/', views.account_info, name='account_info'),
+    path('change-password/', views.change_password, name='change_password'),
+    path('delete-account/', views.delete_account, name='delete_account'),
+
 ]

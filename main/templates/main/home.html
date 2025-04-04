@@ -1,26 +1,27 @@
 {% extends 'main/base.html' %}
+{% load static %}
 
 {% block content %}
 
 <!-- Update the href to point to the consultations page -->
-<a href="{% url 'main:consultations' %}" class="button">Book a Free Consultation</a>
+<a href="{% url 'main:consultations' %}" class="primary-button">Book a Free Consultation</a>
 
 <div class="card-container">
     <div class="card">
-        <p>Solar Panels</p>
-        <img src="/static/images/solar.png" alt="Solar Panels">
+        <a href="{% url 'main:solar_panels' %}" class="button">Solar Panels</a>
+        <img src="{% static 'images/solar_panels.jpg' %}" alt="Solar Panels">
     </div>
     <div class="card">
-        <p>EV Chargers</p>
-        <img src="/static/images/charger.png" alt="EV Chargers">
+        <a href="{% url 'main:ev_chargers' %}" class="button">EV Chargers</a>
+        <img src="{% static 'images/ev_chargers.jpg' %}" alt="EV Chargers">
     </div>
     <div class="card">
-        <p>Smart Home Devices</p>
-        <img src="/static/images/smart_home.png" alt="Smart Home Devices">
+        <a href="{% url 'main:smart_home_devices' %}" class="button">Smart Home Devices</a>
+        <img src="{% static 'images/smart_home_devices.jpg' %}" alt="Smart Home Devices">
     </div>
     <div class="card">
-        <p>Carbon Footprint Calculator</p>
-        <img src="/static/images/carbon.png" alt="Carbon Footprint Calculator">
+        <a href="{% url 'main:my_carbon_footprint' %}" class="button">Carbon Footprint Calculator</a>
+        <img src="{% static 'images/carbon_footprint.jpg' %}" alt="Carbon Footprint Calculator">
     </div>
 </div>
 {% endblock %}

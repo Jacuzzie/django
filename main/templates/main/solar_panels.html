@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+<div class="product-page">
+    <h1>Solar Panels</h1>
+    <img src="{% static 'images/solar_panels.jpg' %}" alt="Solar Panels" class="product-image">
+    <p>Solar panels are a great way to harness renewable energy and reduce your electricity bills. They are environmentally friendly and help reduce your carbon footprint.</p>
+    <ul>
+        <li>High efficiency solar panels</li>
+        <li>Durable and weather-resistant</li>
+        <li>Available in various sizes</li>
+    </ul>
+    <a href="{% url 'main:consultations' %}" class="primary-button">Book a Free Consultation</a>
+</div>
+{% endblock %}
